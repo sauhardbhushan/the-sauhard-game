@@ -1,24 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './css/App.css';
+import Question from './components/Question'
+import Home from './components/Home'
+
+import app from 'firebase';
+
+import firebaseConfig from './config/firebase'
+
+
+export const FirebaseContext = React.createContext(null)
+app.initializeApp(firebaseConfig)
+
+export const ref = app.database().ref('/')
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <FirebaseContext.Provider value={ref}>
+      </FirebaseContext.Provider>
+      <Home questionNo={1}></Home>
     </div>
   );
 }
