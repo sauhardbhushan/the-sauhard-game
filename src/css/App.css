@@ -10,3 +10,17 @@ body {
   text-align: center;
   padding: 50px 0 50px 0 ;
 }
+
+ion-list {
+--ion-background-color: #eee !important;
+border-radius: 5px;
+/* --ion-border-color: transparent !important; */
+}
+
+.register__input {
+  border-radius: 20px;
+}
+
+.register__content {
+  margin: 40% 0;
+}

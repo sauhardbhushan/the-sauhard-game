@@ -3,18 +3,22 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    Link,
+    Redirect
 } from 'react-router-dom';
-import { ref } from '../App'
-import Question from './Question';
-import Leaderboard from './Leaderboard';
-import AddQuestion from './AddQuestion';
 
-let allQuestions;
+import { ref } from '../App'
+
+import Question from './Question';
+import Leaderboard from './Leaderboard.jsx';
+import Register from './Register';
+
+let allQuestions = [];
 class Home extends React.Component {
 
     constructor() {
         super();
+
         this.state = {
             isPlay: false,
             quiz: [],
@@ -34,62 +38,75 @@ class Home extends React.Component {
         ref.once('value').then(snapshot => {
             state = snapshot.val();
             this.setState({ quiz: state.questions, isPlay: true })
-            console.log('in', this.state.isPlay)
             this.setCurrentQuestion();
         });
 
     }
 
     setCurrentQuestion() {
-        console.log('settet', this.state.isPlay)
         if (this.state.isPlay) {
             allQuestions = Object.keys(this.state.quiz)
             const currentKey = allQuestions[this.state.currentQuestionNo]
             this.setState({ currentQuestion: currentKey, currentOptions: this.state.quiz[currentKey] })
-            console.log('set', this.state.currentQuestion, 'options', this.state.currentOptions)
         }
     }
 
     getNextQuestion(isCorrect) {
         // get next q
+        console.log('gettin next q 1', this.state.currentQuestionNo)
         const nextQNo = this.state.currentQuestionNo + 1;
-        const nextQ = allQuestions[nextQNo]
-        if (allQuestions) {
-            this.setState({
-                currentQuestionNo: nextQNo,
-                currentQuestion: nextQ,
-                currentOptions: this.state.quiz[nextQ],
-                score: this.state.score + isCorrect
-            })
-        }
+
+        if (allQuestions.length > 0 && nextQNo === allQuestions.length) {
+            console.log('finised, you got', this.state.score);
+            return (
+                <Router>
+                    <Switch>
+                        <Redirect to="/register"></Redirect>
+                    </Switch>
+                </Router>
+
+            )
+
+            }
+
+        const nextQ = allQuestions[nextQNo] || null;
+        this.setState({
+            currentQuestionNo: nextQNo,
+            currentQuestion: nextQ,
+            currentOptions: this.state.quiz[nextQ],
+            score: this.state.score + isCorrect
+        })
+
+        console.log('gettin next q', this.state.currentQuestionNo)
     }
 
-    componentDidUpdate() {
-        if (allQuestions && this.state.currentQuestionNo === allQuestions.length) {
-            console.log('finished, you got', this.state.score)
-        }
-    }
+    // componentWillUpdate() {
+    //     console.log('cwu', this.state.currentQuestionNo, allQuestions.length)
+
+    //     }
+    // }
+
 
     render() {
 
         return (
             <Router>
 
-                {this.state.isPlay && this.state.currentQuestion ?
-                    <div>
-                        <Switch>
-                            <Route path="/play">
-                                <Question question={this.state.currentQuestion} options={this.state.currentOptions} getNextQuestion={this.getNextQuestion} />
-                            </Route>
-                            <Route path="/leaderboard" component={Leaderboard}>
-                                <Leaderboard />
-                            </Route>
-                            <Route path="/add-question" component={AddQuestion}>
-                            </Route>
-                        </Switch>
+                {/* {this.state.isPlay && this.state.currentQuestion ? */}
+                <div>
+                    <Switch>
+                        <Route path="/play" exact>
+                            <Question question={this.state.currentQuestion} options={this.state.currentOptions} getNextQuestion={this.getNextQuestion} />
+                        </Route>
+                        {/* </Switch>
                     </div>
-                    :
+                    
                     <div>
+                        <Switch> */}
+                        <Route path="/leaderboard" exact><Leaderboard dbRef={ref}></Leaderboard>
+                        </Route>
+                        <Route path="/register"><Register score={this.state.score}></Register></Route>
+
                         <ion-grid class="ion-padding">
                             <ion-row class="ion-justify-content-center">
                                 <ion-col size="10">
@@ -111,11 +128,10 @@ class Home extends React.Component {
                                     <Link to="/add-question"><ion-button expand="block" shape="round" size="large">Add q</ion-button></Link>
                                 </ion-col>
                             </ion-row>
-                            
-                        </ion-grid>
 
-                    </div>
-                }
+                        </ion-grid>
+                    </Switch>
+                </div>
 
 
             </Router>
