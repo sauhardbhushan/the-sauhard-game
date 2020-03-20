@@ -20,7 +20,7 @@ class Home extends React.Component {
         super();
 
         this.state = {
-            isPlay: false,
+            isFinished: false,
             quiz: [],
             currentQuestionNo: 0,
             currentQuestion: '',
@@ -37,18 +37,16 @@ class Home extends React.Component {
         let state;
         ref.once('value').then(snapshot => {
             state = snapshot.val();
-            this.setState({ quiz: state.questions, isPlay: true })
+            this.setState({ quiz: state.questions })
             this.setCurrentQuestion();
         });
 
     }
 
     setCurrentQuestion() {
-        if (this.state.isPlay) {
-            allQuestions = Object.keys(this.state.quiz)
-            const currentKey = allQuestions[this.state.currentQuestionNo]
-            this.setState({ currentQuestion: currentKey, currentOptions: this.state.quiz[currentKey] })
-        }
+        allQuestions = Object.keys(this.state.quiz)
+        const currentKey = allQuestions[this.state.currentQuestionNo]
+        this.setState({ currentQuestion: currentKey, currentOptions: this.state.quiz[currentKey] })
     }
 
     getNextQuestion(isCorrect) {
@@ -58,16 +56,9 @@ class Home extends React.Component {
 
         if (allQuestions.length > 0 && nextQNo === allQuestions.length) {
             console.log('finised, you got', this.state.score);
-            return (
-                <Router>
-                    <Switch>
-                        <Redirect to="/register"></Redirect>
-                    </Switch>
-                </Router>
 
-            )
-
-            }
+            this.setState({ isFinished: true })
+        }
 
         const nextQ = allQuestions[nextQNo] || null;
         this.setState({
@@ -89,23 +80,26 @@ class Home extends React.Component {
 
     render() {
 
-        return (
+        if (this.state.isFinished) {
+            return (
             <Router>
-
-                {/* {this.state.isPlay && this.state.currentQuestion ? */}
-                <div>
+                <Route path='/register'><Register score={this.state.score}></Register></Route>
+                <Route><Redirect to="/register"></Redirect></Route>
+            </Router>
+            )
+        }
+        else {
+            return (
+                <Router>
                     <Switch>
                         <Route path="/play" exact>
                             <Question question={this.state.currentQuestion} options={this.state.currentOptions} getNextQuestion={this.getNextQuestion} />
                         </Route>
-                        {/* </Switch>
-                    </div>
-                    
-                    <div>
-                        <Switch> */}
-                        <Route path="/leaderboard" exact><Leaderboard dbRef={ref}></Leaderboard>
-                        </Route>
-                        <Route path="/register"><Register score={this.state.score}></Register></Route>
+                        <Route path="/leaderboard" exact><Leaderboard dbRef={ref}></Leaderboard></Route>
+                        <Route path="/register"><Register score={0}></Register></Route>
+
+
+
 
                         <ion-grid class="ion-padding">
                             <ion-row class="ion-justify-content-center">
@@ -131,11 +125,10 @@ class Home extends React.Component {
 
                         </ion-grid>
                     </Switch>
-                </div>
 
-
-            </Router>
-        )
+                </Router>
+            )
+        }
     }
 }
 

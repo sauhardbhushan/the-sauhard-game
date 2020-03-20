@@ -25,7 +25,7 @@ class Question extends React.Component {
     }
 
     render() {
-
+        console.log('render')
         return (
             <div>
                 <ion-grid class="ion-padding">
