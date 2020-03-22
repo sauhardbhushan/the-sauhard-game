@@ -1,14 +1,29 @@
 body {
-  background-color: #afeeea;
+  background: url('https://images.wallpapersden.com/image/download/desert-nights-moon-5k-minimalism_57965_5120x2880.jpg') fixed;
+  background-position: 50% 70%;
+  color: #f4f5f8;
+  font-family: 'Mali' !important;
 }
 
-.options {
-  text-transform: none;
+.logo {
+  font-family: 'Amatic SC';
+  text-align: center;
+  padding: 100px 0;
+
+  font-size: 75px;
+  font-weight: 900;
 }
 
 .c-question {
   text-align: center;
-  /* padding: 50px 0 50px 0 ; */
+  padding: 50px 0;
+}
+
+ion-button {
+  text-transform: capitalize;
+  font-family: 'Mali' !important;
+  width: 100%;
+  color: transparent;
 }
 
 ion-list {
@@ -34,4 +49,18 @@ border-radius: 5px;
   position: fixed;
   width: 100%;
   overflow: auto;
+  padding-top: 0;
+}
+
+.c-leaderboard--text {
+  text-align: center;
+  padding: 30px 0 40px 0;
+}
+
+.c-leaderboard__button{
+  width: 60px;
+  height: 60px;
+  border: solid white 1px;
+  border-radius: 50%;
+  background-color: #f4f5f8;
 }
