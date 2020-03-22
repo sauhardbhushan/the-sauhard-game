@@ -1,17 +1,11 @@
-import React from 'react'
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-    Redirect
-} from 'react-router-dom';
-
-import { ref } from '../App'
-
-import Question from './Question';
-import Leaderboard from './Leaderboard.jsx';
+import React from 'react';
+import { BrowserRouter as Router, Link, Redirect, Route, Switch } from 'react-router-dom';
+import { db } from '../App';
 import Register from './Register';
+import Leaderboard from './Leaderboard';
+import Question from './Question';
+
+
 
 let allQuestions = [];
 class Home extends React.Component {
@@ -35,7 +29,7 @@ class Home extends React.Component {
 
     getQuestions() {
         let state;
-        ref.once('value').then(snapshot => {
+        db.ref('/').once('value').then(snapshot => {
             state = snapshot.val();
             this.setState({ quiz: state.questions })
             this.setCurrentQuestion();
@@ -68,7 +62,7 @@ class Home extends React.Component {
             score: this.state.score + isCorrect
         })
 
-        console.log('gettin next q', this.state.currentQuestionNo)
+        console.log('gettin next q', this.state.score)
     }
 
     // componentWillUpdate() {
@@ -79,47 +73,40 @@ class Home extends React.Component {
 
 
     render() {
-
+        
         if (this.state.isFinished) {
             return (
-            <Router>
-                <Route path='/register'><Register score={this.state.score}></Register></Route>
-                <Route><Redirect to="/register"></Redirect></Route>
-            </Router>
+                <Router>
+                    <Route path='/register'><Register score={this.state.score}></Register></Route>
+                    <Route><Redirect to="/register"></Redirect></Route>
+                </Router>
             )
         }
         else {
             return (
+
                 <Router>
                     <Switch>
                         <Route path="/play" exact>
                             <Question question={this.state.currentQuestion} options={this.state.currentOptions} getNextQuestion={this.getNextQuestion} />
                         </Route>
-                        <Route path="/leaderboard" exact><Leaderboard dbRef={ref}></Leaderboard></Route>
+                        <Route path="/leaderboard" exact><Leaderboard dbRef={db}></Leaderboard></Route>
                         <Route path="/register"><Register score={0}></Register></Route>
-
-
-
 
                         <ion-grid class="ion-padding">
                             <ion-row class="ion-justify-content-center">
                                 <ion-col size="10">
-                                    <h1>The Sauhard Game</h1>
+                                    <h1 className="logo">The Sauhard Game</h1>
                                 </ion-col>
                             </ion-row>
                             <ion-row class="ion-justify-content-center">
                                 <ion-col size="10">
-                                    <Link to="/play" onClick={this.getQuestions}><ion-button expand="block" shape="round" size="large">Play</ion-button></Link>
+                                    <Link to="/play" onClick={this.getQuestions}><ion-button color="light" shape="round" size="large">Play</ion-button></Link>
                                 </ion-col>
                             </ion-row>
                             <ion-row class="ion-justify-content-center">
                                 <ion-col size="10">
-                                    <Link to="/leaderboard"><ion-button expand="block" shape="round" size="large">Leaderboard</ion-button></Link>
-                                </ion-col>
-                            </ion-row>
-                            <ion-row class="ion-justify-content-center">
-                                <ion-col size="10">
-                                    <Link to="/add-question"><ion-button expand="block" shape="round" size="large">Add q</ion-button></Link>
+                                    <Link to="/leaderboard"><ion-button color="light" shape="round" size="large">Leaderboard</ion-button></Link>
                                 </ion-col>
                             </ion-row>
 
