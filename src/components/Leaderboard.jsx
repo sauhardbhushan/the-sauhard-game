@@ -73,6 +73,13 @@ class Leaderboard extends React.Component {
                         </div>
 
                         <div className="c-leaderboard ion-padding">
+                            <div className="c-leaderboard__column-headings">
+                                <ion-row>
+                                    <ion-col size="2">Rank</ion-col>
+                                    <ion-col>Name</ion-col>
+                                <ion-col size="3" class="u-text-center">Score / 10</ion-col>
+                                </ion-row>
+                            </div>
                             {/* <ion-row>
                                 <ion-col size="11"> */}
                                     {this.state.isLoading ? <ion-spinner /> :

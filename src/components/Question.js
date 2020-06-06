@@ -52,7 +52,7 @@ class Question extends React.Component {
     }
 
     render() {
-        console.log('render', this.props.score)
+
         return (
             <div>
                 <ion-grid class="ion-padding">
