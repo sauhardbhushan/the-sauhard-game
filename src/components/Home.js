@@ -45,14 +45,11 @@ class Home extends React.Component {
 
     getNextQuestion(isCorrect) {
         // get next q
-        console.log('gettin next q 1', this.state.currentQuestionNo)
         const nextQNo = this.state.currentQuestionNo + 1;
 
-        if (allQuestions.length > 0 && nextQNo === allQuestions.length) {
-            console.log('finised, you got', this.state.score);
-
+        if (allQuestions.length > 0 && nextQNo === allQuestions.length) 
             this.setState({ isFinished: true })
-        }
+        
 
         const nextQ = allQuestions[nextQNo] || null;
         this.setState({
@@ -62,15 +59,7 @@ class Home extends React.Component {
             score: this.state.score + isCorrect
         })
 
-        console.log('gettin next q', this.state.score)
     }
-
-    // componentWillUpdate() {
-    //     console.log('cwu', this.state.currentQuestionNo, allQuestions.length)
-
-    //     }
-    // }
-
 
     render() {
         

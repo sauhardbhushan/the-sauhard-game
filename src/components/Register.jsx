@@ -48,7 +48,7 @@ class Register extends React.Component {
                                     YOU GOT {this.props.score || 'NaN (something went wrong)'}!!!
                             </h1>
                                 <h2>
-                                    {this.props.score < 7 ? '(Book some revision lessons)' : `Fantastic effort!! Halfway there to being Sauhard's favourite acquantance`}
+                                    {this.props.score < 5 ? '(Book some revision lessons)' : this.props.score > 8 ? `Woww!!! Congrats, you little genius!` : `Fantastic effort!! You must be a valuable acquaintance!`}
                                 </h2>
 
                             </ion-col>
