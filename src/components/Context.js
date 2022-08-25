@@ -10,7 +10,6 @@ class Context extends React.Component {
     getQuestions = () => {
         ref.on('value', async snapshot => {
             const state = snapshot.val();
-
             this.setState({ isPlay: true, questions: state.questions })
         })
 
